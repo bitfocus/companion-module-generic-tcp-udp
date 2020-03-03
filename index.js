@@ -197,10 +197,11 @@ instance.prototype.destroy = function() {
 
 instance.prototype.CHOICES_END = [
 	{ id: '', 			label: 'None' },
-	{ id: '\r', 		label: '\\r' },
-	{ id: '\n', 		label: '\\n' },
-	{ id: '\r\n', 	label: '\\r\\n' },
-	{ id: '\n\r', 	label: '\\n\\r' },
+	{ id: '\n', 		label: 'CR - \\n (Common UNIX/Mac)' },
+	{ id: '\r\n', 	label: 'CRLF - \\r\\n (Common Windows)' },
+	{ id: '\r', 		label: 'LF - \\r (Old MacOS)' },
+	{ id: '\x00', 	label: 'NULL - \\x00 (Can happen)' },
+	{ id: '\n\r', 	label: 'LFCR - \\n\\r (Just stupid)' },
 ];
 
 instance.prototype.init_presets = function () {
@@ -229,7 +230,7 @@ instance.prototype.actions = function(system) {
 					type: 'dropdown',
 					id: 'id_end',
 					label: 'Command End Caracter:',
-					default: '\r',
+					default: '\n',
 					choices: self.CHOICES_END
 				}
 
