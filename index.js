@@ -130,7 +130,27 @@ instance.prototype.config_fields = function () {
 			id: 'info',
 			label: 'Information',
 			width: 12,
-			value: '<strong>If you are using this plugin</strong>, then it would probably mean that you are using some software that has not been supported yet, and we would therefore really appreciate if you went ahead and made a module request for it here:<br /><br />https://github.com/bitfocus/companion-module-requests/issues<br /><br />In that way, more people will get to benefit from this in the future, thanks.'	
+			value: `
+				<div class="alert alert-danger">
+					<h3>IMPORTANT MESSAGE</h3>
+					<div>
+						<strong>Please read and understand the following before using this module</strong>
+						<br>
+						The companion project started out as an attempt to make the everyday life of a technician easier. We've held back generic TCP/UDP modules for a long time
+						to ensure that we have ready made actions, presets and feedbacks for as many products as possible.
+						<ul>
+							<li>You shoudn't need to go around remembering raw TCP commands</li>
+							<li>If you have a product we don't support, please file a module request for it</li>
+							<li>Do you think your product/device is too insignificant to make a module for, it's not.</li>
+							<li>Properitary/inhouse products should also have their own modules.</li>
+							<li>Please use Generic TCP/UDP as a last resort</li>
+							<li>With generic modules you won't get nice things like presets and feedback</li>
+						</ul>
+						<a href="https://github.com/bitfocus/companion-module-requests/issues" target="_new" class="btn btn-warning mr-1">See current requests</a>
+						<a href="https://github.com/bitfocus/companion-module-requests/issues/new" target="_new" class="btn btn-success">Request support for a product</a>
+					</div>
+				</div>
+			`
 		},
 		{
 			type: 'textinput',
