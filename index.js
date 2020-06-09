@@ -223,13 +223,14 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					id: 'id_send',
 					label: 'Command:',
+					tooltip: 'Use %hh to insert Hex codes',
 					default: '',
 					width: 6
 				},
 				{
 					type: 'dropdown',
 					id: 'id_end',
-					label: 'Command End Caracter:',
+					label: 'Command End Character:',
 					default: '\n',
 					choices: self.CHOICES_END
 				}
@@ -247,7 +248,7 @@ instance.prototype.action = function(action) {
 	switch(action.action) {
 
 		case 'send':
-			cmd = action.options.id_send;
+			cmd = unescape(action.options.id_send);
 			end = action.options.id_end;
 			break;
 
