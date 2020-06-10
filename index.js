@@ -196,12 +196,12 @@ instance.prototype.destroy = function() {
 };
 
 instance.prototype.CHOICES_END = [
-	{ id: '', 			label: 'None' },
-	{ id: '\n', 		label: 'CR - \\n (Common UNIX/Mac)' },
-	{ id: '\r\n', 	label: 'CRLF - \\r\\n (Common Windows)' },
-	{ id: '\r', 		label: 'LF - \\r (Old MacOS)' },
-	{ id: '\x00', 	label: 'NULL - \\x00 (Can happen)' },
-	{ id: '\n\r', 	label: 'LFCR - \\n\\r (Just stupid)' },
+	{ id: '',     label: 'None' },
+	{ id: '\n',   label: 'CR - \\n (Common UNIX/Mac)' },
+	{ id: '\n\r', label: 'CRLF - \\n\\r (Common Windows)' },
+	{ id: '\r',   label: 'LF - \\r (Old MacOS)' },
+	{ id: '\x00', label: 'NULL - \\x00 (Can happen)' },
+	{ id: '\r\n', label: 'LFCR - \\r\\n (Just stupid)' },
 ];
 
 instance.prototype.init_presets = function () {
@@ -223,13 +223,14 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					id: 'id_send',
 					label: 'Command:',
+					tooltip: 'Use %hh to insert Hex codes',
 					default: '',
 					width: 6
 				},
 				{
 					type: 'dropdown',
 					id: 'id_end',
-					label: 'Command End Caracter:',
+					label: 'Command End Character:',
 					default: '\n',
 					choices: self.CHOICES_END
 				}
@@ -247,7 +248,7 @@ instance.prototype.action = function(action) {
 	switch(action.action) {
 
 		case 'send':
-			cmd = action.options.id_send;
+			cmd = unescape(action.options.id_send);
 			end = action.options.id_end;
 			break;
 

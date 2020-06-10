@@ -16,3 +16,6 @@ A generic module for performing simple TCP and UDP requests, for more info look 
 
 **V1.0.2**
 -Added the option to chose the end caractors: \r, \n, \r\n, \n\r or none at all.
+
+**V1.0.5**
+-Added the option to insert hex codes using the %hh format.
