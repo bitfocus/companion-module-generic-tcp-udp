@@ -254,29 +254,34 @@ instance.prototype.action = function(action) {
 
 	}
 
-	if (self.config.prot == 'tcp') {
+	/* 
+	 * create a binary buffer pre-encoded 'latin1' (8bit no change bytes)
+	 * sending a string assumes 'utf8' encoding 
+	 * which then escapes character values over 0x7F
+	 * and destroys the 'binary' content
+	 */
+	var sendBuf = Buffer.from(cmd + end, 'latin1');
 
-		if (cmd !== undefined) {
+	if (sendBuf != '') {
 
-			debug('sending ',cmd + end,"to",self.config.host);
+		if (self.config.prot == 'tcp') {
+
+			debug('sending ',sendBuf,"to",self.config.host);
 
 			if (self.socket !== undefined && self.socket.connected) {
-				self.socket.send(cmd + end);
+				self.socket.send(sendBuf);
 			}
 			else {
 				debug('Socket not connected :(');
 			}
 		}
-	}
 
-	if (self.config.prot == 'udp') {
-
-		if (cmd !== undefined ) {
+		if (self.config.prot == 'udp') {
 
 			if (self.udp !== undefined ) {
-				debug('sending',cmd + end,"to",self.config.host);
+				debug('sending',sendBuf,"to",self.config.host);
 
-				self.udp.send(cmd + end);
+				self.udp.send(sendBuf);
 			}
 		}
 	}

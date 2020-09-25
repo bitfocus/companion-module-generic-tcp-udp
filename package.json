@@ -1,6 +1,6 @@
 {
   "name": "generic-tcp-udp",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"api_version": "1.0.0",
 	"description": "Generic TCP and UDP",
 	"keywords": [
@@ -20,6 +20,10 @@
 		"url": "git+https://github.com/bitfocus/companion-module-generic-tcp-udp.git"
 	},
 	"author": "Andreas H. Thomsen <mc-hauge@hotmail.com>",
+	"contributors": [
+		"Andrew Broughton <andy@checkcheckonetwo.com>",
+		"John A Knight Jr <istnv@ayesti.com>"
+	],
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/bitfocus/companion-module-generic-tcp-udp/issues"
