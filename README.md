@@ -19,3 +19,6 @@ A generic module for performing simple TCP and UDP requests, for more info look 
 
 **V1.0.5**
 -Added the option to insert hex codes using the %hh format.
+
+**V1.0.6**
+-pre-encode send buffer as 'latin1' (binary) to prevent 'utf8' escape of 8bit characters
