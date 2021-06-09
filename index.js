@@ -1,8 +1,6 @@
 var tcp           = require('../../tcp');
 var udp           = require('../../udp');
 var instance_skel = require('../../instance_skel');
-var debug;
-var log;
 
 function instance(system, id, config) {
 	var self = this;
@@ -44,8 +42,6 @@ instance.prototype.updateConfig = function(config) {
 instance.prototype.init = function() {
 	var self = this;
 
-	debug = self.debug;
-	log = self.log;
 	self.init_presets();
 
 	if (self.config.prot == 'tcp') {
@@ -71,7 +67,7 @@ instance.prototype.init_udp = function() {
 		self.udp = new udp(self.config.host, self.config.port);
 
 		self.udp.on('error', function (err) {
-			debug("Network error", err);
+			self.debug("Network error", err);
 			self.status(self.STATE_ERROR, err);
 			self.log('error',"Network error: " + err.message);
 		});
@@ -105,14 +101,14 @@ instance.prototype.init_tcp = function() {
 		});
 
 		self.socket.on('error', function (err) {
-			debug("Network error", err);
+			self.debug("Network error", err);
 			self.status(self.STATE_ERROR, err);
 			self.log('error',"Network error: " + err.message);
 		});
 
 		self.socket.on('connect', function () {
 			self.status(self.STATE_OK);
-			debug("Connected");
+			self.debug("Connected");
 		})
 
 		self.socket.on('data', function (data) {});
@@ -192,7 +188,7 @@ instance.prototype.destroy = function() {
 		self.udp.destroy();
 	}
 
-	debug("destroy", self.id);;
+	self.debug("destroy", self.id);;
 };
 
 instance.prototype.CHOICES_END = [
@@ -266,20 +262,20 @@ instance.prototype.action = function(action) {
 
 		if (self.config.prot == 'tcp') {
 
-			debug('sending ',sendBuf,"to",self.config.host);
+			self.debug('sending ',sendBuf,"to",self.config.host);
 
 			if (self.socket !== undefined && self.socket.connected) {
 				self.socket.send(sendBuf);
 			}
 			else {
-				debug('Socket not connected :(');
+				self.debug('Socket not connected :(');
 			}
 		}
 
 		if (self.config.prot == 'udp') {
 
 			if (self.udp !== undefined ) {
-				debug('sending',sendBuf,"to",self.config.host);
+				self.debug('sending',sendBuf,"to",self.config.host);
 
 				self.udp.send(sendBuf);
 			}
