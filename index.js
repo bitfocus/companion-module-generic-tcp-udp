@@ -216,7 +216,7 @@ instance.prototype.actions = function(system) {
 			label: 'Send Command',
 			options: [
 				{
-					type: 'textinput',
+					type: 'textwithvariables',
 					id: 'id_send',
 					label: 'Command:',
 					tooltip: 'Use %hh to insert Hex codes',
@@ -244,7 +244,10 @@ instance.prototype.action = function(action) {
 	switch(action.action) {
 
 		case 'send':
-			cmd = unescape(action.options.id_send);
+			self.parseVariables(action.options.id_send, function(value) {
+				cmd = unescape(value);
+			})
+
 			end = action.options.id_end;
 			break;
 
