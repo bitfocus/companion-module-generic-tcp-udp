@@ -248,6 +248,7 @@ instance.prototype.action = function(action) {
 				cmd = unescape(value);
 			})
 
+			self.log('info', 'Sending ' + cmd);
 			end = action.options.id_end;
 			break;
 
