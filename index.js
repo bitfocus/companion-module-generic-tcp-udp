@@ -201,7 +201,7 @@ class instance extends instance_skel {
 				label: 'Send Command',
 				options: [
 					{
-						type: 'textinput',
+						type: 'textwithvariables',
 						id: 'id_send',
 						label: 'Command:',
 						tooltip: 'Use %hh to insert Hex codes',
@@ -226,7 +226,9 @@ class instance extends instance_skel {
 
 		switch (action.action) {
 			case 'send':
-				cmd = unescape(action.options.id_send)
+				this.parseVariables(action.options.id_send, function(value) {
+					cmd = unescape(value);
+				})
 				end = action.options.id_end
 				break
 		}

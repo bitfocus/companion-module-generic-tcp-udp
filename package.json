@@ -1,6 +1,6 @@
 {
   "name": "generic-tcp-udp",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"api_version": "1.0.0",
 	"description": "Generic TCP and UDP",
 	"keywords": [
