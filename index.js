@@ -1,132 +1,124 @@
-var tcp           = require('../../tcp');
-var udp           = require('../../udp');
-var instance_skel = require('../../instance_skel');
+const tcp = require('../../tcp')
+const udp = require('../../udp')
+const instance_skel = require('../../instance_skel')
 
-function instance(system, id, config) {
-	var self = this;
-
-	// super-constructor
-	instance_skel.apply(this, arguments);
-
-	self.actions(); // export actions
-	self.init_presets();
-
-	return self;
-}
-
-instance.prototype.updateConfig = function(config) {
-	var self = this;
-	self.init_presets();
-
-	if (self.udp !== undefined) {
-		self.udp.destroy();
-		delete self.udp;
+class instance extends instance_skel {
+	/**
+	 * Create an instance of the module
+	 *
+	 * @param {EventEmitter} system - the brains of the operation
+	 * @param {string} id - the instance ID
+	 * @param {Object} config - saved user configuration parameters
+	 * @since 1.0.0
+	 */
+	constructor(system, id, config) {
+		super(system, id, config)
+		this.actions() // export actions
+		this.init_presets() // export presets
 	}
 
-	if (self.socket !== undefined) {
-		self.socket.destroy();
-		delete self.socket;
+	updateConfig(config) {
+		this.init_presets()
+
+		if (this.udp !== undefined) {
+			this.udp.destroy()
+			delete this.udp
+		}
+
+		if (this.socket !== undefined) {
+			this.socket.destroy()
+			delete this.socket
+		}
+
+		this.config = config
+
+		if (this.config.prot == 'tcp') {
+			this.init_tcp()
+		}
+
+		if (this.config.prot == 'udp') {
+			this.init_udp()
+		}
 	}
 
-	self.config = config;
+	init() {
+		this.init_presets()
+		if (this.config.prot == 'tcp') {
+			this.init_tcp()
+		}
 
-	if (self.config.prot == 'tcp') {
-		self.init_tcp();
-	};
-
-	if (self.config.prot == 'udp') {
-		self.init_udp();
-	};
-};
-
-instance.prototype.init = function() {
-	var self = this;
-
-	self.init_presets();
-
-	if (self.config.prot == 'tcp') {
-		self.init_tcp();
-	};
-
-	if (self.config.prot == 'udp') {
-		self.init_udp();
-	};
-};
-
-instance.prototype.init_udp = function() {
-	var self = this;
-
-	if (self.udp !== undefined) {
-		self.udp.destroy();
-		delete self.udp;
+		if (this.config.prot == 'udp') {
+			this.init_udp()
+		}
 	}
 
-	self.status(self.STATE_WARNING, 'Connecting');
+	init_udp() {
+		if (this.udp !== undefined) {
+			this.udp.destroy()
+			delete this.udp
+		}
 
-	if (self.config.host !== undefined) {
-		self.udp = new udp(self.config.host, self.config.port);
+		this.status(this.STATE_WARNING, 'Connecting')
 
-		self.udp.on('error', function (err) {
-			self.debug("Network error", err);
-			self.status(self.STATE_ERROR, err);
-			self.log('error',"Network error: " + err.message);
-		});
+		if (this.config.host !== undefined) {
+			this.udp = new udp(this.config.host, this.config.port)
 
-		// If we get data, thing should be good
-		self.udp.on('data', function () {
-			self.status(self.STATE_OK);
-		});
+			this.udp.on('error', function (err) {
+				this.debug('Network error', err)
+				this.status(this.STATE_ERROR, err)
+				this.log('error', 'Network error: ' + err.message)
+			})
 
-		self.udp.on('status_change', function (status, message) {
-			self.status(status, message);
-		});
-	}
-};
+			// If we get data, thing should be good
+			this.udp.on('data', function () {
+				this.status(this.STATE_OK)
+			})
 
-instance.prototype.init_tcp = function() {
-	var self = this;
-
-	if (self.socket !== undefined) {
-		self.socket.destroy();
-		delete self.socket;
+			this.udp.on('status_change', function (status, message) {
+				this.status(status, message)
+			})
+		}
 	}
 
-	self.status(self.STATE_WARNING, 'Connecting');
+	init_tcp() {
+		if (this.socket !== undefined) {
+			this.socket.destroy()
+			delete this.socket
+		}
 
-	if (self.config.host) {
-		self.socket = new tcp(self.config.host, self.config.port);
+		this.status(this.STATE_WARNING, 'Connecting')
 
-		self.socket.on('status_change', function (status, message) {
-			self.status(status, message);
-		});
+		if (this.config.host) {
+			this.socket = new tcp(this.config.host, this.config.port)
 
-		self.socket.on('error', function (err) {
-			self.debug("Network error", err);
-			self.status(self.STATE_ERROR, err);
-			self.log('error',"Network error: " + err.message);
-		});
+			this.socket.on('status_change', function (status, message) {
+				this.status(status, message)
+			})
 
-		self.socket.on('connect', function () {
-			self.status(self.STATE_OK);
-			self.debug("Connected");
-		})
+			this.socket.on('error', function (err) {
+				this.debug('Network error', err)
+				this.status(this.STATE_ERROR, err)
+				this.log('error', 'Network error: ' + err.message)
+			})
 
-		self.socket.on('data', function (data) {});
+			this.socket.on('connect', function () {
+				this.status(this.STATE_OK)
+				this.debug('Connected')
+			})
+
+			this.socket.on('data', function (data) {})
+		}
 	}
-};
 
-
-// Return config fields for web config
-instance.prototype.config_fields = function () {
-	var self = this;
-
-	return [
-		{
-			type: 'text',
-			id: 'info',
-			label: 'Information',
-			width: 12,
-			value: `
+	// Return config fields for web config
+	config_fields() {
+		return [
+			{
+				type: 'text',
+				id: 'info',
+				label: 'Information',
+				width: 12,
+				value: `
 				<div class="alert alert-danger">
 					<h3>IMPORTANT MESSAGE</h3>
 					<div>
@@ -146,142 +138,126 @@ instance.prototype.config_fields = function () {
 						<a href="https://github.com/bitfocus/companion-module-requests/issues/new" target="_new" class="btn btn-success">Request support for a product</a>
 					</div>
 				</div>
-			`
-		},
-		{
-			type: 'textinput',
-			id: 'host',
-			label: 'Target IP',
-			width: 6,
-			regex: self.REGEX_IP
-		},
-		{
-			type: 'textinput',
-			id: 'port',
-			label: 'Target Port',
-			width: 2,
-			default: 7000,
-			regex: self.REGEX_PORT
-        },
-		{
-			type: 'dropdown',
-			id: 'prot',
-			label: 'Connect with TCP / UDP',
-			default: 'tcp',
-			choices:  [
-				{ id: 'tcp', label: 'TCP' },
-				{ id: 'udp', label: 'UDP' }
-			]
+			`,
+			},
+			{
+				type: 'textinput',
+				id: 'host',
+				label: 'Target IP',
+				width: 6,
+				regex: this.REGEX_IP,
+			},
+			{
+				type: 'textinput',
+				id: 'port',
+				label: 'Target Port',
+				width: 2,
+				default: 7000,
+				regex: this.REGEX_PORT,
+			},
+			{
+				type: 'dropdown',
+				id: 'prot',
+				label: 'Connect with TCP / UDP',
+				default: 'tcp',
+				choices: [
+					{ id: 'tcp', label: 'TCP' },
+					{ id: 'udp', label: 'UDP' },
+				],
+			},
+		]
+	}
+
+	// When module gets deleted
+	destroy() {
+		if (this.socket !== undefined) {
+			this.socket.destroy()
 		}
+
+		if (this.udp !== undefined) {
+			this.udp.destroy()
+		}
+
+		this.debug('destroy', this.id)
+	}
+
+	CHOICES_END = [
+		{ id: '', label: 'None' },
+		{ id: '\n', label: 'LF - \\n (Common UNIX/Mac)' },
+		{ id: '\r\n', label: 'CRLF - \\r\\n (Common Windows)' },
+		{ id: '\r', label: 'CR - \\r (Old MacOS)' },
+		{ id: '\x00', label: 'NULL - \\x00 (Can happen)' },
+		{ id: '\n\r', label: 'LFCR - \\n\\r (Just stupid)' },
 	]
-};
 
-// When module gets deleted
-instance.prototype.destroy = function() {
-	var self = this;
-
-	if (self.socket !== undefined) {
-		self.socket.destroy();
+	init_presets() {
+		let presets = []
+		this.setPresetDefinitions(presets)
 	}
 
-	if (self.udp !== undefined) {
-		self.udp.destroy();
+	actions(system) {
+		this.system.emit('instance_actions', this.id, {
+			send: {
+				label: 'Send Command',
+				options: [
+					{
+						type: 'textinput',
+						id: 'id_send',
+						label: 'Command:',
+						tooltip: 'Use %hh to insert Hex codes',
+						default: '',
+						width: 6,
+					},
+					{
+						type: 'dropdown',
+						id: 'id_end',
+						label: 'Command End Character:',
+						default: '\n',
+						choices: this.CHOICES_END,
+					},
+				],
+			},
+		})
 	}
 
-	self.debug("destroy", self.id);;
-};
+	action(action) {
+		let cmd
+		let end
 
-instance.prototype.CHOICES_END = [
-	{ id: '',     label: 'None' },
-	{ id: '\n',   label: 'LF - \\n (Common UNIX/Mac)' },
-	{ id: '\r\n', label: 'CRLF - \\r\\n (Common Windows)' },
-	{ id: '\r',   label: 'CR - \\r (Old MacOS)' },
-	{ id: '\x00', label: 'NULL - \\x00 (Can happen)' },
-	{ id: '\n\r', label: 'LFCR - \\n\\r (Just stupid)' },
-];
+		switch (action.action) {
+			case 'send':
+				cmd = unescape(action.options.id_send)
+				end = action.options.id_end
+				break
+		}
 
-instance.prototype.init_presets = function () {
-	var self = this;
-	var presets = [];
+		/*
+		 * create a binary buffer pre-encoded 'latin1' (8bit no change bytes)
+		 * sending a string assumes 'utf8' encoding
+		 * which then escapes character values over 0x7F
+		 * and destroys the 'binary' content
+		 */
+		let sendBuf = Buffer.from(cmd + end, 'latin1')
 
-	self.setPresetDefinitions(presets);
-}
+		if (sendBuf != '') {
+			if (this.config.prot == 'tcp') {
+				this.debug('sending ', sendBuf, 'to', this.config.host)
 
-instance.prototype.actions = function(system) {
-	var self = this;
-
-	self.system.emit('instance_actions', self.id, {
-
-		'send': {
-			label: 'Send Command',
-			options: [
-				{
-					type: 'textinput',
-					id: 'id_send',
-					label: 'Command:',
-					tooltip: 'Use %hh to insert Hex codes',
-					default: '',
-					width: 6
-				},
-				{
-					type: 'dropdown',
-					id: 'id_end',
-					label: 'Command End Character:',
-					default: '\n',
-					choices: self.CHOICES_END
+				if (this.socket !== undefined && this.socket.connected) {
+					this.socket.send(sendBuf)
+				} else {
+					this.debug('Socket not connected :(')
 				}
-
-			]
-		}
-	});
-}
-
-instance.prototype.action = function(action) {
-	var self = this;
-	var cmd;
-	var end;
-
-	switch(action.action) {
-
-		case 'send':
-			cmd = unescape(action.options.id_send);
-			end = action.options.id_end;
-			break;
-
-	}
-
-	/* 
-	 * create a binary buffer pre-encoded 'latin1' (8bit no change bytes)
-	 * sending a string assumes 'utf8' encoding 
-	 * which then escapes character values over 0x7F
-	 * and destroys the 'binary' content
-	 */
-	var sendBuf = Buffer.from(cmd + end, 'latin1');
-
-	if (sendBuf != '') {
-
-		if (self.config.prot == 'tcp') {
-
-			self.debug('sending ',sendBuf,"to",self.config.host);
-
-			if (self.socket !== undefined && self.socket.connected) {
-				self.socket.send(sendBuf);
 			}
-			else {
-				self.debug('Socket not connected :(');
-			}
-		}
 
-		if (self.config.prot == 'udp') {
+			if (this.config.prot == 'udp') {
+				if (this.udp !== undefined) {
+					this.debug('sending', sendBuf, 'to', this.config.host)
 
-			if (self.udp !== undefined ) {
-				self.debug('sending',sendBuf,"to",self.config.host);
-
-				self.udp.send(sendBuf);
+					this.udp.send(sendBuf)
+				}
 			}
 		}
 	}
 }
-
-instance_skel.extendedBy(instance);
-exports = module.exports = instance;
+exports = module.exports = instance

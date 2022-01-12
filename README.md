@@ -22,3 +22,6 @@ A generic module for performing simple TCP and UDP requests, for more info look 
 
 **V1.0.6**
 -pre-encode send buffer as 'latin1' (binary) to prevent 'utf8' escape of 8bit characters
+
+**V1.0.7**
+-re-write to ES6
