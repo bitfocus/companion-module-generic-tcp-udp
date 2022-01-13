@@ -63,18 +63,18 @@ class instance extends instance_skel {
 		if (this.config.host !== undefined) {
 			this.udp = new udp(this.config.host, this.config.port)
 
-			this.udp.on('error', function (err) {
+			this.udp.on('error', (err) => {
 				this.debug('Network error', err)
 				this.status(this.STATE_ERROR, err)
 				this.log('error', 'Network error: ' + err.message)
 			})
 
 			// If we get data, thing should be good
-			this.udp.on('data', function () {
+			this.udp.on('data', () => {
 				this.status(this.STATE_OK)
 			})
 
-			this.udp.on('status_change', function (status, message) {
+			this.udp.on('status_change', (status, message) => {
 				this.status(status, message)
 			})
 		}
@@ -91,22 +91,22 @@ class instance extends instance_skel {
 		if (this.config.host) {
 			this.socket = new tcp(this.config.host, this.config.port)
 
-			this.socket.on('status_change', function (status, message) {
+			this.socket.on('status_change', (status, message) => {
 				this.status(status, message)
 			})
 
-			this.socket.on('error', function (err) {
+			this.socket.on('error', (err) => {
 				this.debug('Network error', err)
 				this.status(this.STATE_ERROR, err)
 				this.log('error', 'Network error: ' + err.message)
 			})
 
-			this.socket.on('connect', function () {
+			this.socket.on('connect', () => {
 				this.status(this.STATE_OK)
 				this.debug('Connected')
 			})
 
-			this.socket.on('data', function (data) {})
+			this.socket.on('data', (data) => {})
 		}
 	}
 
@@ -226,7 +226,7 @@ class instance extends instance_skel {
 
 		switch (action.action) {
 			case 'send':
-				this.parseVariables(action.options.id_send, function(value) {
+				this.parseVariables(action.options.id_send, (value) => {
 					cmd = unescape(value);
 				})
 				end = action.options.id_end
