@@ -1,6 +1,6 @@
 {
-  "name": "generic-tcp-udp",
-	"version": "1.0.9",
+	"name": "generic-tcp-udp",
+	"version": "1.0.10",
 	"api_version": "1.0.0",
 	"description": "Generic TCP and UDP",
 	"keywords": [
@@ -10,7 +10,7 @@
 	"manufacturer": "Generic",
 	"product": "TCP and UDP Requests",
 	"shortname": "tcp-udp",
- 	"homepage": "https://github.com/bitfocus/companion-module-generic-tcp-udp#readme",
+	"homepage": "https://github.com/bitfocus/companion-module-generic-tcp-udp#readme",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -29,4 +29,3 @@
 		"url": "https://github.com/bitfocus/companion-module-generic-tcp-udp/issues"
 	}
 }
-
