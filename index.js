@@ -196,7 +196,7 @@ class instance extends instance_skel {
 	}
 
 	actions(system) {
-		this.system.emit('instance_actions', this.id, {
+		this.setActions({
 			send: {
 				label: 'Send Command',
 				options: [
