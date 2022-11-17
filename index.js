@@ -34,6 +34,8 @@ class instance extends instance_skel {
 
 		if (this.config.prot == 'tcp') {
 			this.init_tcp()
+
+			this.init_tcp_variables()
 		}
 
 		if (this.config.prot == 'udp') {
@@ -45,6 +47,8 @@ class instance extends instance_skel {
 		this.init_presets()
 		if (this.config.prot == 'tcp') {
 			this.init_tcp()
+
+			this.init_tcp_variables()
 		}
 
 		if (this.config.prot == 'udp') {
@@ -106,8 +110,31 @@ class instance extends instance_skel {
 				this.debug('Connected')
 			})
 
-			this.socket.on('data', (data) => {})
+			this.socket.on('data', (data) => {
+				if (this.config.saveresponse) {
+					let dataResponse = data
+
+					if (this.config.convertresponse == 'string') {
+						dataResponse = data.toString()
+					}
+					else if (this.config.convertresponse == 'hex') {
+						dataResponse = data.toString('hex')
+					}
+
+					this.setVariable('tcp_response', dataResponse)
+				}
+			})
 		}
+	}
+
+	init_tcp_variables() {
+		let variables = [
+			{ label: 'Last TCP Response', name: 'tcp_response'}
+		]
+
+		this.setVariableDefinitions(variables);
+
+		this.setVariable('tcp_response', '');
 	}
 
 	// Return config fields for web config
@@ -165,6 +192,25 @@ class instance extends instance_skel {
 					{ id: 'udp', label: 'UDP' },
 				],
 			},
+			{
+				type: 'checkbox',
+				id: 'saveresponse',
+				label: 'Save TCP Response',
+				default: false,
+				isVisible: (configValues) => configValues.prot === 'tcp',
+			},
+			{
+				type: 'dropdown',
+				id: 'convertresponse',
+				label: 'Convert TCP Response Format',
+				default: 'none',
+				choices: [
+					{ id: 'none', label: 'No conversion'},
+					{ id: 'hex', label: 'To Hex'},
+					{ id: 'string', label: 'To String'}
+				],
+				isVisible: (configValues) => configValues.saveresponse === true,
+			}
 		]
 	}
 

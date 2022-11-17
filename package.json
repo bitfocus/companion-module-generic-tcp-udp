@@ -1,6 +1,6 @@
 {
 	"name": "generic-tcp-udp",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"api_version": "1.0.0",
 	"description": "Generic TCP and UDP",
 	"keywords": [
@@ -22,7 +22,8 @@
 	"author": "Andreas H. Thomsen <mc-hauge@hotmail.com>",
 	"contributors": [
 		"Andrew Broughton <andy@checkcheckonetwo.com>",
-		"John A Knight Jr <istnv@ayesti.com>"
+		"John A Knight Jr <istnv@ayesti.com>",
+		"Joseph Adams <josephdadams@gmail.com>"
 	],
 	"license": "MIT",
 	"bugs": {
