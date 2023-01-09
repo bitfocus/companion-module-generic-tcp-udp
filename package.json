@@ -1,17 +1,8 @@
 {
 	"name": "generic-tcp-udp",
-	"version": "1.0.11",
-	"api_version": "1.0.0",
-	"description": "Generic TCP and UDP",
-	"keywords": [
-		"Protocol",
-		"Generic"
-	],
-	"manufacturer": "Generic",
-	"product": "TCP and UDP Requests",
-	"shortname": "tcp-udp",
-	"homepage": "https://github.com/bitfocus/companion-module-generic-tcp-udp#readme",
+	"version": "2.0.0",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
@@ -19,14 +10,11 @@
 		"type": "git",
 		"url": "git+https://github.com/bitfocus/companion-module-generic-tcp-udp.git"
 	},
-	"author": "Andreas H. Thomsen <mc-hauge@hotmail.com>",
-	"contributors": [
-		"Andrew Broughton <andy@checkcheckonetwo.com>",
-		"John A Knight Jr <istnv@ayesti.com>",
-		"Joseph Adams <josephdadams@gmail.com>"
-	],
 	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-generic-tcp-udp/issues"
+	"dependencies": {
+		"@companion-module/base": "~1.0.2"
+	},
+	"devDependencies": {
+		"@companion-module/tools": "^0.5.1"
 	}
 }
