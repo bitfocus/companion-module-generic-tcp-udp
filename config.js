@@ -1,6 +1,9 @@
 import { Regex } from '@companion-module/base'
 
-export const ConfigFields = [
+const REGEX_IP_OR_HOST =
+    '/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})$|^((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))$/'
+
+  export const ConfigFields = [
 	{
 		type: 'static-text',
 		id: 'info',
@@ -15,7 +18,7 @@ export const ConfigFields = [
 						The companion project started out as an attempt to make the everyday life of a technician easier. We've held back generic TCP/UDP modules for a long time
 						to ensure that we have ready made actions, presets and feedbacks for as many products as possible.
 						<ul>
-							<li>You shoudn't need to go around remembering raw TCP commands</li>
+							<li>You shoudn't need re-program and send raw TCP commands</li>
 							<li>If you have a product we don't support, please file a module request for it</li>
 							<li>Do you think your product/device is too insignificant to make a module for, it's not.</li>
 							<li>Properitary/inhouse products can also have their own modules.</li>
@@ -31,9 +34,9 @@ export const ConfigFields = [
 	{
 		type: 'textinput',
 		id: 'host',
-		label: 'Target IP',
+		label: 'Target Host name or IP',
 		width: 8,
-		regex: Regex.IP,
+		regex: REGEX_IP_OR_HOST,
 	},
 	{
 		type: 'textinput',
