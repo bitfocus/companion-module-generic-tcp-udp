@@ -1,9 +1,9 @@
 import { Regex } from '@companion-module/base'
 
 const REGEX_IP_OR_HOST =
-    '/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})$|^((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))$/'
+	'/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})$|^((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]).)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]))$/'
 
-  export const ConfigFields = [
+export const ConfigFields = [
 	{
 		type: 'static-text',
 		id: 'info',
@@ -15,14 +15,14 @@ const REGEX_IP_OR_HOST =
 					<div>
 						<strong>Please read and understand the following before using this module</strong>
 						<br>
-						The companion project started out as an attempt to make the everyday life of a technician easier. We've held back generic TCP/UDP modules for a long time
-						to ensure that we have ready made actions, presets and feedbacks for as many products as possible.
+						The companion project is designed to make the everyday life of a technician easier.
+						We pefer to have ready made actions, presets and feedbacks for as many products as possible.<p>
+            This generic TCP/UDP module is intended for testing or small-scale products.
 						<ul>
-							<li>You shoudn't need re-program and send raw TCP commands</li>
-							<li>If you have a product we don't support, please file a module request for it</li>
-							<li>Do you think your product/device is too insignificant to make a module for, it's not.</li>
+							<li>You shoudn't need to find, program and send raw TCP commands</li>
+							<li>If you have or use a product we don't support, please file a module request for it</li>
+							<li>Do you think your product/device is too insignificant to make a module for? It's probably not.</li>
 							<li>Properitary/inhouse products can also have their own modules.</li>
-							<li>Please use Generic TCP/UDP as a last resort</li>
 							<li>With generic modules you won't get nice things like presets and feedback</li>
 						</ul>
 						<a href="https://github.com/bitfocus/companion-module-requests/issues" target="_new" class="btn btn-warning mr-1">See current requests</a>
