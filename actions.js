@@ -80,7 +80,7 @@ export function getActionDefinitions(self) {
 				},
 			],
 			callback: async (action) => {
-				const cmd = decode(await self.parseVariablesInString(action.options.id_send_hex), 'hex')
+				const cmd = Buffer.from(await self.parseVariablesInString(action.options.id_send_hex), 'hex')
 
 				if (cmd != '') {
 					/*
