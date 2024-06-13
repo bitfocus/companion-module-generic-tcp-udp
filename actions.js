@@ -89,10 +89,10 @@ export function getActionDefinitions(self) {
 					 * which then escapes character values over 0x7F
 					 * and destroys the 'binary' content
 					 */
-					const sendBuf = Buffer.from(cmd + action.options.id_end, 'latin1')
+					const sendBuf = Buffer.concat([cmd, Buffer.from(action.options.id_end, 'latin1')])
 
 					if (self.config.prot == 'tcp') {
-						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString())
+						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString('hex'))
 
 						if (self.socket !== undefined && self.socket.isConnected) {
 							self.socket.send(sendBuf)
