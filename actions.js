@@ -103,7 +103,7 @@ export function getActionDefinitions(self) {
 
 					if (self.config.prot == 'udp') {
 						if (self.udp !== undefined) {
-							self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString())
+							self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString('hex'))
 
 							self.udp.send(sendBuf)
 						}
