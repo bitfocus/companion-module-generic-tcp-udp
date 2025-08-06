@@ -82,8 +82,8 @@ export function getActionDefinitions(self) {
 			callback: async (action, context) => {
 				let cmdData = await context.parseVariablesInString(action.options.id_send_hex)
 
-				// add leading '0' if only 1 character
-				if (cmdData.length == 1) {
+				// add leading '0' if odd number of characters
+				if (cmdData.length % 2) {
 					cmdData = '0' + cmdData
 				}
 				const cmd = Buffer.from(cmdData, 'hex')

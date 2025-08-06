@@ -21,4 +21,4 @@ In that way, more people will get to benefit from this in the future, thanks.
 | **V2.1.1** | Indicate OK when UDP Listener is started                                                                |
 | **V2.1.2** | Use correct function to create send buffer from hex string                                              |
 | **V2.1.3** | 'concat' send buffer and end-of-message characters instead of overloaded '+'                            |
-| **V2.2.0** | Add leading '0' for single character Hex command value                                                  |
+| **V2.2.0** | Add leading '0' for odd character length Hex command value                                              |
