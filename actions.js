@@ -16,7 +16,7 @@ export function getActionDefinitions(self) {
 					type: 'textinput',
 					id: 'id_send',
 					label: 'Command:',
-					tooltip: 'Use %hh to insert Hex codes\nObsolete, use Send HEX command instead',
+					tooltip: `Use %hh to insert Hex codes\nOBSOLETE! Use the 'Send HEX command' instead`,
 					default: '',
 					useVariables: true,
 				},
@@ -28,8 +28,8 @@ export function getActionDefinitions(self) {
 					choices: CHOICES_END,
 				},
 			],
-			callback: async (action) => {
-				const cmd = unescape(await self.parseVariablesInString(action.options.id_send))
+			callback: async (action, context) => {
+				const cmd = unescape(await context.parseVariablesInString(action.options.id_send))
 
 				if (cmd != '') {
 					/*
@@ -79,8 +79,14 @@ export function getActionDefinitions(self) {
 					choices: CHOICES_END,
 				},
 			],
-			callback: async (action) => {
-				const cmd = Buffer.from(await self.parseVariablesInString(action.options.id_send_hex), 'hex')
+			callback: async (action, context) => {
+				let cmdData = await context.parseVariablesInString(action.options.id_send_hex)
+
+				// add leading '0' if odd number of characters
+				if (cmdData.length % 2) {
+					cmdData = '0' + cmdData
+				}
+				const cmd = Buffer.from(cmdData, 'hex')
 
 				if (cmd != '') {
 					/*
