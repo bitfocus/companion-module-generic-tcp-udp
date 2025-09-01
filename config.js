@@ -58,8 +58,17 @@ export const ConfigFields = [
 	},
 	{
 		type: 'checkbox',
+		id: 'connect_on_send',
+		label: 'Connect only when sending commands',
+		tooltip: 'Open TCP connection only when needed, then close immediately. Useful for proxies that close idle connections.',
+		default: false,
+		isVisible: (configValues) => configValues.prot === 'tcp',
+	},
+	{
+		type: 'checkbox',
 		id: 'saveresponse',
 		label: 'Save TCP Response',
+		tooltip: 'Save the last TCP response received. In on-demand mode, responses are captured during the 500ms connection window.',
 		default: false,
 		isVisible: (configValues) => configValues.prot === 'tcp',
 	},
