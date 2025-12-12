@@ -16,7 +16,7 @@ export const ConfigFields = [
 						<strong>Please read and understand the following before using this module</strong>
 						<br>
 						The companion project is designed to make the everyday life of a technician easier.
-						We pefer to have ready made actions, presets and feedbacks for as many products as possible.<p>
+						We prefer to have ready made actions, presets and feedbacks for as many products as possible.<p>
             This generic TCP/UDP module is intended for testing or small-scale products.
 						<ul>
 							<li>You shoudn't need to find, program and send raw TCP commands</li>
