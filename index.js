@@ -25,9 +25,15 @@ class GenericTcpUdpInstance extends InstanceBase {
 		this.config = config
 
 		if (this.config.prot == 'tcp') {
-			this.init_tcp()
-
-			this.init_tcp_variables()
+			if (this.config.connect_on_send) {
+				// On-demand mode - don't create persistent connection
+				this.updateStatus(InstanceStatus.Ok, 'Ready (On-demand mode)')
+				this.init_tcp_variables()
+			} else {
+				// Traditional persistent connection mode
+				this.init_tcp()
+				this.init_tcp_variables()
+			}
 		}
 
 		if (this.config.prot == 'udp') {
@@ -121,9 +127,75 @@ class GenericTcpUdpInstance extends InstanceBase {
 	}
 
 	init_tcp_variables() {
-		this.setVariableDefinitions([{ name: 'Last TCP Response', variableId: 'tcp_response' }])
+		if (this.config.saveresponse) {
+			this.setVariableDefinitions([{ name: 'Last TCP Response', variableId: 'tcp_response' }])
+			this.setVariableValues({ tcp_response: '' })
+		} else {
+			this.setVariableDefinitions([])
+		}
+	}
 
-		this.setVariableValues({ tcp_response: '' })
+	// Create a temporary TCP connection for on-demand sending
+	async sendTcpOnDemand(data) {
+		return new Promise((resolve, reject) => {
+			if (!this.config.host) {
+				reject(new Error('No host configured'))
+				return
+			}
+
+			this.log('debug', 'Creating on-demand TCP connection to ' + this.config.host + ':' + this.config.port)
+			
+			const tempSocket = new TCPHelper(this.config.host, this.config.port)
+			let responseData = null
+			let connectionTimeout = null
+
+			// Set timeout for connection
+			connectionTimeout = setTimeout(() => {
+				tempSocket.destroy()
+				reject(new Error('Connection timeout'))
+			}, 5000) // 5 second timeout
+
+			tempSocket.on('status_change', (status, message) => {
+				if (status === InstanceStatus.Ok) {
+					// Connected successfully, send data
+					clearTimeout(connectionTimeout)
+					this.log('debug', 'On-demand connection established, sending data')
+					tempSocket.send(data)
+					
+					// Close connection after a delay to allow response
+					setTimeout(() => {
+						tempSocket.destroy()
+						resolve(responseData)
+					}, 500) // 500ms delay for response
+				} else if (status === InstanceStatus.ConnectionFailure) {
+					clearTimeout(connectionTimeout)
+					tempSocket.destroy()
+					reject(new Error(message || 'Connection failed'))
+				}
+			})
+
+			tempSocket.on('error', (err) => {
+				clearTimeout(connectionTimeout)
+				this.log('error', 'On-demand TCP error: ' + err.message)
+				tempSocket.destroy()
+				reject(err)
+			})
+
+			tempSocket.on('data', (data) => {
+				if (this.config.saveresponse) {
+					let dataResponse = data
+
+					if (this.config.convertresponse == 'string') {
+						dataResponse = data.toString()
+					} else if (this.config.convertresponse == 'hex') {
+						dataResponse = data.toString('hex')
+					}
+
+					this.setVariableValues({ tcp_response: dataResponse })
+					responseData = dataResponse
+				}
+			})
+		})
 	}
 }
 
