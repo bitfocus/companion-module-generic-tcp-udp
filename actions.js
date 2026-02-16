@@ -43,10 +43,21 @@ export function getActionDefinitions(self) {
 					if (self.config.prot == 'tcp') {
 						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString())
 
-						if (self.socket !== undefined && self.socket.isConnected) {
-							self.socket.send(sendBuf)
+						if (self.config.connect_on_send) {
+							// On-demand connection mode
+							try {
+								await self.sendTcpOnDemand(sendBuf)
+								self.log('debug', 'On-demand TCP send successful')
+							} catch (err) {
+								self.log('error', 'On-demand TCP send failed: ' + err.message)
+							}
 						} else {
-							self.log('debug', 'Socket not connected :(')
+							// Traditional persistent connection mode
+							if (self.socket !== undefined && self.socket.isConnected) {
+								self.socket.send(sendBuf)
+							} else {
+								self.log('debug', 'Socket not connected :(')
+							}
 						}
 					}
 
@@ -100,10 +111,21 @@ export function getActionDefinitions(self) {
 					if (self.config.prot == 'tcp') {
 						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString('hex'))
 
-						if (self.socket !== undefined && self.socket.isConnected) {
-							self.socket.send(sendBuf)
+						if (self.config.connect_on_send) {
+							// On-demand connection mode
+							try {
+								await self.sendTcpOnDemand(sendBuf)
+								self.log('debug', 'On-demand TCP hex send successful')
+							} catch (err) {
+								self.log('error', 'On-demand TCP hex send failed: ' + err.message)
+							}
 						} else {
-							self.log('debug', 'Socket not connected :(')
+							// Traditional persistent connection mode
+							if (self.socket !== undefined && self.socket.isConnected) {
+								self.socket.send(sendBuf)
+							} else {
+								self.log('debug', 'Socket not connected :(')
+							}
 						}
 					}
 
