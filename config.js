@@ -58,6 +58,13 @@ export const ConfigFields = [
 	},
 	{
 		type: 'checkbox',
+		id: 'broadcast',
+		label: 'Enable UDP Broadcast',
+		default: false,
+		isVisible: (configValues) => configValues.prot === 'udp',
+	},
+	{
+		type: 'checkbox',
 		id: 'saveresponse',
 		label: 'Save TCP Response',
 		default: false,

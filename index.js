@@ -61,7 +61,7 @@ class GenericTcpUdpInstance extends InstanceBase {
 		this.updateStatus(InstanceStatus.Connecting)
 
 		if (this.config.host) {
-			this.udp = new UDPHelper(this.config.host, this.config.port)
+			this.udp = new UDPHelper(this.config.host, this.config.port, { broadcast: !!this.config.broadcast })
 			this.updateStatus(InstanceStatus.Ok)
 
 			this.udp.on('error', (err) => {
