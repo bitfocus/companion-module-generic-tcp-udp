@@ -7,7 +7,7 @@ export const ConfigFields = [
 	{
 		type: 'static-text',
 		id: 'info',
-		label: 'Information',
+		label: '',
 		width: 12,
 		value: `
 				<div class="alert alert-danger">
@@ -61,14 +61,14 @@ export const ConfigFields = [
 		id: 'broadcast',
 		label: 'Enable UDP Broadcast',
 		default: false,
-		isVisible: (configValues) => configValues.prot === 'udp',
+		isVisibleExpression: `$(options:prot) == "udp"`,
 	},
 	{
 		type: 'checkbox',
 		id: 'saveresponse',
 		label: 'Save TCP Response',
 		default: false,
-		isVisible: (configValues) => configValues.prot === 'tcp',
+		isVisibleExpression: `$(options:prot) == "tcp"`,
 	},
 	{
 		type: 'dropdown',
@@ -80,6 +80,6 @@ export const ConfigFields = [
 			{ id: 'hex', label: 'To Hex' },
 			{ id: 'string', label: 'To String' },
 		],
-		isVisible: (configValues) => configValues.prot === 'tcp' && !!configValues.saveresponse,
+		isVisibleExpression: `$(options:prot) == "tcp" && !!$(options:saveresponse)`,
 	},
 ]

@@ -29,7 +29,7 @@ export function getActionDefinitions(self) {
 				},
 			],
 			callback: async (action, context) => {
-				const cmd = unescape(await context.parseVariablesInString(action.options.id_send))
+				const cmd = unescape(action.options.id_send)
 
 				if (cmd != '') {
 					/*
@@ -80,7 +80,7 @@ export function getActionDefinitions(self) {
 				},
 			],
 			callback: async (action, context) => {
-				let cmdData = await context.parseVariablesInString(action.options.id_send_hex)
+				let cmdData = action.options.id_send_hex
 
 				// add leading '0' if odd number of characters
 				if (cmdData.length % 2) {
